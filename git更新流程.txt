@@ -1,0 +1,21 @@
+// fork别人的代码后，别人的代码有更新，如何同步更新
+ex： https://github.com/yelingfeng/vue-typescript-tours.git
+
+1、git remote -v    // 检查远程状态
+2、git remote add upstream https://github.com/yelingfeng/vue-typescript-tours.git  // 把原作者的远程仓库添加到remote
+3、git remote -v
+4、git fetch upstream 如果远程主机项目有了新的更新就需要把更新取回本地
+5、git checkout master 用于切换分支或者恢复工作树的文件
+6、git merge upstream/master 合并分支
+7、git push origin master 提交
+
+===================================
+
+git remote remove upstream 删除
+
+-----------------------------------------------------
+
+合并冲突问题：
+1、找到冲突文件，解决冲突
+2、git add 冲突文件
+3、git commit -m '注释'
