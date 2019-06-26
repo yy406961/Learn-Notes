@@ -1,0 +1,63 @@
+git
+
+安装淘宝NPM镜像
+$ npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+检查cnpm版本
+cnpm -v
+
+# 全局安装 vue-cli
+$ npm install --g vue-cli
+
+2.X
+# 创建一个基于 webpack 模板的新项目(创建my-project文件夹，项目就在这个文件夹下)
+$ vue init webpack my-project
+# 安装依赖，走你
+$ cd my-project
+$ cnpm install
+（如果这里报错，试试用命令 npm config set strict-ssl false）
+$ cnpm run dev
+
+安装路由
+npm install vue-router --save
+
+安装vue-resource
+npm install vue-resource --save
+
+安装stylus-loader依赖
+找到 "css-loader": "^0.28.0",
+添加 "stylus-loader": "^2.1.1",
+在执行 npm install
+
+图表字体制作
+打开网址
+https://icomoon.io
+
+点击右上角 IcoMoon App
+
+在新的页面点击左上角 Import Icons
+
+3.X
+创建项目
+vue create my-project
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

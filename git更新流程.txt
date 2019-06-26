@@ -50,11 +50,154 @@ git pull origin master
 这几步将代码推至了远程
 最后再git pull origin master 一下，确保远程的全部拉下来，有的你刚提交完有人又提交了，你再拉一下会避免比的不是最新的问题
 
+如何使用 commitizen
+// npm 的安装命令
+npm i -g commitizen
+npm i -g cz-conventional-changelog
+echo '{ "path": "cz-conventional-changelog" }' > ~/.czrc
+
+// yarn 的安装命令
+yarn global add commitizen
+yarn global add cz-conventional-changelog
+echo '{ "path": "cz-conventional-changelog" }' > ~/.czrc
+
+以上命令代表全局使用 cz-conventional-changelog 适配器，你也可以通过以下命令来局部安装适配器
+
+// 这种方式是使用npm来安装
+
+commitizen init cz-conventional-changelog --save-dev --save-exact
+
+// 这种方式是使用yarn来安装
+
+commitizen init cz-conventional-changelog --yarn --dev --exact
+
+假如你已经全局安装了适配器，那么上面的命令会报 
+A previous adapter is already configured. Use --force to override，
+如它所说，只需要加上 --force 参数即可强制使用局部适配器，
+// commitizen init cz-conventional-changelog --yarn --dev --exact --force
+
+成功后会在本地局部安装 cz-conventional-changelog，
+并在 package.json 中写入以下内容
 
 
 
+{
+  "devDependencies": {
+   
+ "cz-conventional-changelog": "^2.1.0"
+ 
+ },
+ 
+ "config": {
+   
+ "commitizen": {
+     
+ "path": "./node_modules/cz-conventional-changelog"
+   
+ }
+  }
+}
 
 
+
+// git提交规范， 使用commitizen来执行规范
+先 yarn run lint 跑一边
+1、git add .
+2、git cz   // 相当于git commit 
+3、git push origin master
+然后pr到别人那
+
+---------------------------------------------------------------------------------------------------
+git cz 的选项
+
+在git上显示 fix(home.vue): vsco错误修改
+home.vue页面中vscode报错修改
+
+? Select the type of change that you're committing: (Use arrow keys)
+？选择要提交的更改类型：（使用箭头键
+> feat:     A new feature
+
+
+>专长：新功能
+  fix:      A bug fix
+  修复：错误修复
+  docs:     Documentation only changes
+  文档：仅文档更改
+  style:    Changes that do not affect the meaning of the code (white-space, for matting, missing semi-colons, etc)
+  样式：不影响代码含义的更改（空白，用于
+
+铺垫、缺失的分号等）
+  refactor: A code change that neither fixes a bug nor adds a feature
+  重构：既不修复错误也不添加功能的代码更改。
+  perf:     A code change that improves performance
+  性能：提高性能的代码更改。
+(Move up and down to reveal more choices)
+上下移动以显示更多选项）
+
+按 1 选择feat  1 feat/2 fix/3 docs/4 style/5 refactor/6 perf  ex： 2
+
+? Select the type of change that you're committing: fix:      A bug fix
+？选择要提交的更改类型：修复：错误修复
+ex：fix:      A bug fix  改为 fix: vscode fix  // 没必要动这里
+
+? What is the scope of this change (e.g. component or file name)? (press enter to skip)
+？此更改的范围是什么（例如组件或文件名）？（按Enter键跳过）
+ex：home.vue
+
+？Write a short, imperative tense description of the change:
+？写一个简短的命令式的变化描述：
+ex：vsco错误修改
+
+? Provide a longer description of the change: (press enter to skip)
+？提供更改的较长描述：（按Enter键跳过）
+ex： home.vue页面中vscode报错修改
+
+? Are there any breaking changes? (y/N)
+？有什么突破性的变化吗？（y/n）
+ex：n
+
+? Does this change affect any open issues? (y/N)
+？这一变化是否会影响到任何未解决的问题？（y/n）
+ex：n
+
+--end
+在git上显示 fix(home.vue): vsco错误修改
+home.vue页面中vscode报错修改
+---------------------------------------------------------------------------------------------------
+
+git push origin master 成功后怎么撤销
+
+1、git log  // 查看日志，获取需要回退的版本号
+commit 2369c4c3896d22c2f7f2a410f95ff12c0a3779a0 (HEAD -> master, origin/master, origin/HEAD)
+Author: yy406961 <406961038@qq.com>
+Date:   Sat Jun 15 18:34:53 2019 +0800
+feat(components): add form
+
+commit 0957fa05f1bc8c22efdb72f4d1f9b7f8ce9ca8ba   <------ // 版本号
+Author: yy406961 <406961038@qq.com>
+Date:   Thu Jun 13 18:51:35 2019 +0800
+add storage
+
+2、git reset -soft 2369c4c3896d22c2f7f2a410f95ff12c0a3779a0 
+ 执行 git reset –soft <版本号> ，重置至指定版本的提交，达到撤销提交的目的
+再 git log 查看一下
+ git reset 命令分为两种： git reset –soft 与 git reset –hard ，区别是：
+前者表示只是改变了HEAD的指向，本地代码不会变化，我们使用git status依然可以看到，同时也可以git commit提交。后者直接回改变本地源码，不仅仅指向变化了，代码也回到了那个版本时的代码。
+
+3. 执行 git push origin 分支名 –force ，强制提交当前版本号。
+至此，撤销push提交完成。
+
+ git reset –hard 会把本地代码改到提交之前，如果本地代码真被删了，如何恢复
+1、git reflog    // 查看之前提交的版本号
+0957fa0 (HEAD -> master, origin/master, origin/HEAD) HEAD@{0}: reset: moving to 0957fa05f1bc8c22efdb72f4d1f9b7f8ce9ca8ba
+0957fa0 (HEAD -> master, origin/master, origin/HEAD) HEAD@{1}: reset: moving to 0957fa05f1bc8c22efdb72f4d1f9b7f8ce9ca8ba
+2369c4c HEAD@{2}: commit: feat(components): add form
+0957fa0 (HEAD -> master, origin/master, origin/HEAD) HEAD@{3}: commit: add storage
+c0509ad HEAD@{4}: commit: add echarts demo
+781faf1 HEAD@{5}: clone: from https://github.com/yy406961/vue-typescript-tours.git
+
+2、git reset --hard 2369c4c   // 回到你要恢复的版本
+ok，被删的代码回来了
 
 
 
